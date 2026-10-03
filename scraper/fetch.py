@@ -1700,6 +1700,21 @@ CATEGORY_TO_CAT = {
     # content heuristic classifies each one by what it actually says.
 }
 
+# CRM tag taxonomy (Rell, 2026-10-03): every lead carries two tags --
+# "<county>scraper" naming the source, and a lead-type tag from cat.
+CAT_TO_TYPE_TAG = {
+    "FC": "preforeclosure",
+    "TAX": "taxlien",
+    "PRO": "probate",
+}
+COUNTY_SCRAPER_TAG = COUNTY.lower().replace(" ", "") + "scraper"
+
+
+def crm_type_tag(rec):
+    """Lead-type CRM tag for a record, e.g. 'preforeclosure' or 'taxlien'."""
+    cat = (rec.get("cat") or "").upper()
+    return CAT_TO_TYPE_TAG.get(cat, cat.lower() or "unknown")
+
 FORECLOSURE_MARKERS = [
     "SALE UNDER POWER", "NOTICE OF SALE UNDER POWER", "FORECLOSURE",
     "SECURITY DEED", "ATTORNEY IN FACT", "POWER OF SALE", "DEED UNDER POWER",
@@ -4372,7 +4387,7 @@ def export_ghl_csv(records: List[Dict[str, Any]],
         "Property Address", "Property City", "Property State", "Property Zip",
         "Lead Type", "Document Type", "Date Filed", "Document Number",
         "Amount/Debt Owed", "Seller Score", "Motivated Seller Flags",
-        "Source", "Public Records URL",
+        "Source", "Public Records URL", "Tags",
     ]
     targets = paths if paths is not None else GHL_CSV_PATHS
     main_export = paths is None
@@ -4434,6 +4449,7 @@ def export_ghl_csv(records: List[Dict[str, Any]],
                 "Motivated Seller Flags": "; ".join(rec.get("flags", []) or []),
                 "Source": rec.get("source", ""),
                 "Public Records URL": rec.get("clerk_url", ""),
+                "Tags": f"{COUNTY_SCRAPER_TAG},{crm_type_tag(rec)}",
             })
             written += 1
         except Exception as exc:  # noqa: BLE001
@@ -4572,7 +4588,7 @@ def push_to_gohighlevel(records: List[Dict[str, Any]]) -> None:
             "state": rec.get("mail_state", ""),
             "postalCode": rec.get("mail_zip", ""),
             "source": rec.get("source", ""),
-            "tags": ["rockdale-lead", rec.get("cat", "").lower()] + [
+            "tags": [COUNTY_SCRAPER_TAG, crm_type_tag(rec)] + [
                 f.lower().replace(" ", "-") for f in (rec.get("flags") or [])],
             "customFields": [
                 {"key": "property_address", "field_value": rec.get("prop_address", "")},
