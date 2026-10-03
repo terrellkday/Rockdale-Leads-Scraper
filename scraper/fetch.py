@@ -1771,6 +1771,11 @@ OWNER_PATTERNS = [
     # --- foreclosure ----------------------------------------------------
     r"(?:security\s+deed\s+)?(?:executed|given|granted|made)\s+by\s+"
     r"([A-Z][A-Za-z'\.\-]*(?:[\s,]+(?:AND|&)?\s*[A-Z][A-Za-z'\.\-]*){0,4})",
+    # Some legal organs phrase it "Security Deed from <borrower> to <lender>"
+    # (Fayette County News). Without this, those notices parse no owner and
+    # are dropped as unusable.
+    r"security\s+deed\s+from\s+"
+    r"([A-Z][A-Za-z'\.\-]*(?:\s+[A-Z][A-Za-z'\.\-]*){0,3})\s+to\s+",
     r"\bgrantor(?:s)?\s*(?:is|are|:)?\s*"
     r"([A-Z][A-Za-z'\.\-]*(?:\s+[A-Z][A-Za-z'\.\-]*){0,3})",
     r"\bborrower(?:s)?\s*(?:is|are|:)?\s*"
