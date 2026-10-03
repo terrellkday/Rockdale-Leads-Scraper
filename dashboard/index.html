@@ -1,0 +1,916 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Rockdale Motivated Sellers &mdash; Revamp Home Buyers</title>
+<meta name="description" content="Daily motivated seller leads from Rockdale County, Georgia public records.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Archivo:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+/* ============================================================
+   Rockdale Motivated Sellers
+   Visual direction: surveyor's plat. Drafting-paper ground,
+   engraved title block, and a brass benchmark disc for the
+   seller score -- the one element the page is remembered by.
+   ============================================================ */
+
+:root{
+  /* Palette: drafting paper and plat linework, not newsprint */
+  --paper:      #F1F4F0;
+  --paper-2:    #E7EBE5;
+  --card:       #FBFCFA;
+  --ink:        #16231E;
+  --ink-soft:   #4A5A53;
+  --ink-faint:  #7C8B84;
+  --rule:       #CFD8CF;
+  --rule-soft:  #E1E7DF;
+  --survey:     #2F6F5E;        /* plat linework green */
+  --brass:      #A9884E;        /* benchmark disc */
+  --brass-dark: #7E6435;
+
+  /* Motivation ramp: hot to cool */
+  --t1: #B4341F;   /* 80-100  very high */
+  --t2: #C9862B;   /* 60-79   high */
+  --t3: #5B7F6E;   /* 40-59   moderate */
+  --t4: #8A9691;   /* 0-39    lower */
+
+  --shadow: 0 1px 2px rgba(22,35,30,.06), 0 8px 24px -12px rgba(22,35,30,.18);
+  --radius: 3px;
+
+  --display: "Instrument Serif", Georgia, serif;
+  --body: "Archivo", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  --mono: "IBM Plex Mono", ui-monospace, "SF Mono", Menlo, monospace;
+}
+
+*,*::before,*::after{ box-sizing:border-box; }
+
+html{ -webkit-text-size-adjust:100%; }
+
+body{
+  margin:0;
+  font-family:var(--body);
+  font-size:15px;
+  line-height:1.5;
+  color:var(--ink);
+  background-color:var(--paper);
+  /* Faint drafting grid. Sits behind everything, never competes. */
+  background-image:
+    linear-gradient(to right, rgba(47,111,94,.045) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(47,111,94,.045) 1px, transparent 1px);
+  background-size:28px 28px;
+}
+
+.wrap{ max-width:1360px; margin:0 auto; padding:0 20px 72px; }
+
+/* ---------- Title block ---------------------------------- */
+.plate{
+  display:flex; align-items:baseline; gap:14px; flex-wrap:wrap;
+  padding:30px 0 16px;
+  border-bottom:1px solid var(--rule);
+}
+.mark{
+  font-family:var(--mono); font-size:10px; font-weight:600;
+  letter-spacing:.22em; text-transform:uppercase; color:var(--survey);
+}
+.mark .sep{ color:var(--rule); margin:0 7px; }
+h1{
+  font-family:var(--display); font-weight:400;
+  font-size:clamp(30px,5.4vw,46px); line-height:1.02;
+  margin:0; letter-spacing:-.01em;
+}
+h1 em{ font-style:italic; color:var(--survey); }
+.plate-meta{
+  margin-left:auto; text-align:right;
+  font-family:var(--mono); font-size:11px; color:var(--ink-faint);
+  line-height:1.6;
+}
+@media (max-width:720px){ .plate-meta{ margin-left:0; text-align:left; width:100%; } }
+
+/* ---------- Notices --------------------------------------- */
+.notice{
+  margin:16px 0 0; padding:13px 16px;
+  border:1px solid var(--rule); border-left:3px solid var(--t2);
+  background:var(--card); border-radius:var(--radius);
+  font-size:13.5px; color:var(--ink-soft);
+}
+.notice strong{ color:var(--ink); font-weight:600; }
+.notice.bad{ border-left-color:var(--t1); }
+.notice code{
+  font-family:var(--mono); font-size:12px;
+  background:var(--paper-2); padding:1px 5px; border-radius:2px;
+}
+.notice a{ color:var(--survey); }
+
+/* ---------- Hero: the first call -------------------------- */
+.first{
+  display:grid; grid-template-columns:auto 1fr; gap:30px;
+  align-items:start;
+  margin:26px 0 0; padding:26px 28px;
+  background:var(--card);
+  border:1px solid var(--rule); border-radius:var(--radius);
+  box-shadow:var(--shadow);
+  position:relative; overflow:hidden;
+}
+/* Corner tick, like a plat sheet registration mark */
+.first::after{
+  content:""; position:absolute; top:0; right:0;
+  width:44px; height:44px;
+  background:
+    linear-gradient(to bottom left, transparent 49.6%, var(--rule) 49.6%, var(--rule) 50.4%, transparent 50.4%);
+}
+.first-label{
+  font-family:var(--mono); font-size:10px; font-weight:600;
+  letter-spacing:.2em; text-transform:uppercase; color:var(--t1);
+  margin:0 0 6px;
+}
+.first-name{
+  font-family:var(--display); font-size:clamp(24px,4vw,36px);
+  line-height:1.08; margin:0 0 10px; letter-spacing:-.01em;
+}
+.first-addr{ font-size:16px; margin:0 0 3px; }
+.first-mail{ font-size:13.5px; color:var(--ink-soft); margin:0 0 14px; }
+.first-mail b{ font-weight:500; color:var(--ink-faint); }
+.first-facts{
+  display:flex; gap:8px 18px; flex-wrap:wrap;
+  font-family:var(--mono); font-size:11.5px; color:var(--ink-faint);
+  padding-top:13px; margin-top:13px; border-top:1px solid var(--rule-soft);
+}
+.first-facts b{ color:var(--ink-soft); font-weight:500; }
+@media (max-width:640px){
+  .first{ grid-template-columns:1fr; gap:18px; padding:22px 20px; }
+}
+
+/* ---------- Benchmark disc: the signature ----------------- */
+.disc{ display:block; }
+.disc-ring{ transition:stroke-dashoffset .9s cubic-bezier(.2,.7,.3,1); }
+.disc-num{
+  font-family:var(--mono); font-weight:600;
+  fill:var(--ink); text-anchor:middle;
+}
+.disc-cap{
+  font-family:var(--mono); font-size:6px; font-weight:600;
+  letter-spacing:.11em; fill:var(--brass-dark); text-anchor:middle;
+}
+
+/* ---------- Run strip ------------------------------------- */
+.strip{
+  display:grid; gap:1px; margin:22px 0 0;
+  grid-template-columns:repeat(auto-fit,minmax(120px,1fr));
+  background:var(--rule); border:1px solid var(--rule);
+  border-radius:var(--radius); overflow:hidden;
+}
+.stat{
+  background:var(--card); padding:13px 15px; text-align:left; width:100%;
+  border:0; font:inherit; color:inherit; cursor:pointer;
+  transition:background .12s ease;
+}
+.stat:hover{ background:var(--paper); }
+.stat:focus-visible{ outline:2px solid var(--ink); outline-offset:-2px; }
+.stat[aria-pressed="true"]{ background:var(--ink); }
+.stat[aria-pressed="true"] .stat-n,
+.stat[aria-pressed="true"] .stat-k{ color:var(--paper); }
+.stat[data-role="plain"]{ cursor:default; }
+.stat[data-role="plain"]:hover{ background:var(--card); }
+
+/* ---------- Date chips ------------------------------------ */
+.chips{
+  display:flex; flex-wrap:wrap; gap:6px; align-items:center;
+  margin:18px 0 0;
+}
+.chips-label{
+  font-family:var(--mono); font-size:9.5px; font-weight:500;
+  letter-spacing:.13em; text-transform:uppercase;
+  color:var(--ink-faint); margin-right:4px;
+}
+.chip{
+  font-family:var(--mono); font-size:11px; letter-spacing:.04em;
+  padding:7px 12px; border:1px solid var(--rule); border-radius:999px;
+  background:var(--card); color:var(--ink); cursor:pointer;
+  transition:background .12s ease, border-color .12s ease;
+}
+.chip:hover{ border-color:var(--ink-faint); }
+.chip[aria-pressed="true"]{ background:var(--ink); color:var(--paper); border-color:var(--ink); }
+.chip-note{
+  font-family:var(--mono); font-size:10px; color:var(--ink-faint);
+  margin-left:auto;
+}
+.stat-n{
+  font-family:var(--mono); font-size:22px; font-weight:600;
+  line-height:1.1; letter-spacing:-.02em;
+}
+.stat-k{
+  font-family:var(--mono); font-size:9.5px; font-weight:500;
+  letter-spacing:.13em; text-transform:uppercase;
+  color:var(--ink-faint); margin-top:3px;
+}
+
+/* ---------- Controls -------------------------------------- */
+.controls{
+  position:sticky; top:0; z-index:20;
+  margin:26px 0 0; padding:14px 0;
+  background:var(--paper);
+  border-bottom:1px solid var(--rule);
+}
+.controls-row{ display:flex; gap:10px; flex-wrap:wrap; align-items:flex-end; }
+.field{ display:flex; flex-direction:column; gap:4px; }
+.field label{
+  font-family:var(--mono); font-size:9.5px; font-weight:600;
+  letter-spacing:.13em; text-transform:uppercase; color:var(--ink-faint);
+}
+input[type=search], select{
+  font-family:var(--body); font-size:13.5px; color:var(--ink);
+  background:var(--card);
+  border:1px solid var(--rule); border-radius:var(--radius);
+  padding:7px 10px; min-height:36px;
+}
+input[type=search]{ min-width:230px; }
+select{ min-width:132px; cursor:pointer; }
+input[type=search]:focus-visible, select:focus-visible,
+button:focus-visible, a:focus-visible, th[role=button]:focus-visible{
+  outline:2px solid var(--survey); outline-offset:2px;
+}
+.field-score{ min-width:172px; max-width:210px; }
+.score-head{ display:flex; justify-content:space-between; align-items:baseline; gap:8px; }
+.score-val{ font-family:var(--mono); font-size:12px; font-weight:600; color:var(--ink); }
+input[type=range]{ width:100%; accent-color:var(--survey); height:22px; cursor:pointer; }
+
+.btn{
+  font-family:var(--body); font-size:13px; font-weight:600;
+  padding:8px 14px; min-height:36px;
+  border-radius:var(--radius); border:1px solid var(--rule);
+  background:var(--card); color:var(--ink);
+  cursor:pointer; text-decoration:none;
+  display:inline-flex; align-items:center; gap:7px;
+}
+.btn:hover{ border-color:var(--ink-faint); }
+.btn-go{ background:var(--survey); border-color:var(--survey); color:#fff; }
+.btn-go:hover{ background:#265949; border-color:#265949; }
+/* Second export: same weight, different job, so it reads as an alternative
+   rather than a lesser option. */
+.btn-alt{ background:var(--brass); border-color:var(--brass); color:#fff; }
+.btn-alt:hover{ background:var(--brass-dark); border-color:var(--brass-dark); }
+.spacer{ flex:1 1 auto; }
+.actions{ display:flex; gap:10px; flex:0 0 auto; }
+.count{
+  font-family:var(--mono); font-size:11.5px; color:var(--ink-faint);
+  padding:0 0 9px;
+}
+.count b{ color:var(--ink); font-weight:600; }
+
+/* ---------- Ledger ---------------------------------------- */
+.ledger{ width:100%; border-collapse:collapse; margin-top:2px; }
+.ledger th{
+  font-family:var(--mono); font-size:9.5px; font-weight:600;
+  letter-spacing:.13em; text-transform:uppercase; color:var(--ink-faint);
+  text-align:left; padding:12px 12px 9px; white-space:nowrap;
+  border-bottom:1px solid var(--rule);
+}
+.ledger th[role=button]{ cursor:pointer; user-select:none; }
+.ledger th[role=button]:hover{ color:var(--survey); }
+.ledger th .arrow{ opacity:0; margin-left:3px; }
+.ledger th[aria-sort] .arrow{ opacity:1; color:var(--survey); }
+.ledger td{
+  padding:13px 12px; border-bottom:1px solid var(--rule-soft);
+  vertical-align:top; font-size:13.5px;
+}
+.ledger tbody tr:hover{ background:var(--card); }
+.ledger tbody tr.is-released{ opacity:.55; }
+
+.pill{
+  display:inline-flex; align-items:center; justify-content:center;
+  min-width:38px; padding:3px 8px;
+  font-family:var(--mono); font-size:13px; font-weight:600;
+  color:#fff; border-radius:2px;
+}
+.owner{ font-weight:600; }
+.owner .ent{
+  display:block; font-family:var(--mono); font-size:10px; font-weight:500;
+  letter-spacing:.1em; text-transform:uppercase; color:var(--brass-dark);
+  margin-top:2px;
+}
+.addr-sub{ color:var(--ink-faint); font-size:12px; display:block; margin-top:2px; }
+.mono{ font-family:var(--mono); font-size:12.5px; white-space:nowrap; }
+.type{ font-size:12.5px; }
+.type small{
+  display:block; font-family:var(--mono); font-size:10px;
+  color:var(--ink-faint); margin-top:2px;
+}
+.flags{ display:flex; flex-wrap:wrap; gap:4px; max-width:290px; }
+.flag{
+  font-family:var(--mono); font-size:9.5px; font-weight:500;
+  letter-spacing:.03em; padding:2px 6px;
+  border:1px solid var(--rule); border-radius:2px;
+  background:var(--paper-2); color:var(--ink-soft); white-space:nowrap;
+}
+.flag.hot{ border-color:#E4BFB8; background:#FBEFEC; color:var(--t1); }
+.flag.abs{ border-color:#D9C79C; background:#FBF5E8; color:var(--brass-dark); }
+.link{ color:var(--survey); font-weight:600; font-size:12.5px; }
+
+/* ---------- Empty / error --------------------------------- */
+.blank{
+  text-align:center; padding:76px 24px;
+  border:1px dashed var(--rule); border-radius:var(--radius);
+  margin-top:24px; background:var(--card);
+}
+.blank h2{ font-family:var(--display); font-size:26px; font-weight:400; margin:0 0 8px; }
+.blank p{ color:var(--ink-soft); margin:0 auto; max-width:52ch; font-size:14px; }
+.blank .btn{ margin-top:18px; }
+
+/* ---------- Cards (small screens) ------------------------- */
+.cards{ display:none; }
+.card{
+  background:var(--card); border:1px solid var(--rule);
+  border-left:3px solid var(--rule);
+  border-radius:var(--radius); padding:15px 16px; margin-top:11px;
+}
+.card.is-released{ opacity:.55; }
+.card-top{ display:flex; gap:13px; align-items:flex-start; }
+.card-top .pill{ flex:none; margin-top:2px; }
+.card-who{ font-weight:600; font-size:15px; line-height:1.25; }
+.card-addr{ font-size:13.5px; margin-top:3px; }
+.card-mail{ font-size:12px; color:var(--ink-faint); margin-top:2px; }
+.card-meta{
+  display:flex; gap:6px 14px; flex-wrap:wrap;
+  font-family:var(--mono); font-size:11px; color:var(--ink-faint);
+  margin-top:11px; padding-top:10px; border-top:1px solid var(--rule-soft);
+}
+.card .flags{ margin-top:10px; max-width:none; }
+
+@media (max-width:900px){
+  .ledger{ display:none; }
+  .cards{ display:block; }
+  .controls{ position:static; }
+  input[type=search]{ min-width:100%; }
+  .field{ flex:1 1 138px; }
+  .field-search{ flex:1 1 100%; }
+}
+
+footer{
+  margin-top:44px; padding-top:18px; border-top:1px solid var(--rule);
+  font-family:var(--mono); font-size:10.5px; color:var(--ink-faint);
+  display:flex; gap:8px 20px; flex-wrap:wrap;
+}
+
+@media (prefers-reduced-motion:reduce){
+  *{ animation:none !important; transition:none !important; }
+}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <header class="plate">
+    <div>
+      <p class="mark">Rockdale County<span class="sep">/</span>Georgia<span class="sep">/</span>Public records</p>
+      <h1>Today's <em>motivated</em> sellers</h1>
+    </div>
+    <div class="plate-meta" id="plateMeta"></div>
+  </header>
+
+  <div id="notices"></div>
+  <div id="hero"></div>
+  <div class="strip" id="strip" hidden></div>
+
+  <div class="chips" id="dateChips" hidden>
+    <span class="chips-label">Pulled</span>
+    <button class="chip" type="button" data-since="0">Today</button>
+    <button class="chip" type="button" data-since="1">Yesterday</button>
+    <button class="chip" type="button" data-since="7">7 days</button>
+    <button class="chip" type="button" data-since="14">14 days</button>
+    <button class="chip" type="button" data-since="30">30 days</button>
+    <button class="chip" type="button" data-since="">All time</button>
+    <span class="chip-note" id="chipNote"></span>
+  </div>
+
+  <div class="controls" id="controls" hidden>
+    <div class="controls-row">
+      <div class="field field-search">
+        <label for="q">Search</label>
+        <input type="search" id="q" placeholder="Owner, address, parcel, document number">
+      </div>
+      <div class="field field-score">
+        <div class="score-head">
+          <label for="minScore">Minimum score</label>
+          <span class="score-val" id="minScoreVal">0</span>
+        </div>
+        <input type="range" id="minScore" min="0" max="100" step="5" value="0">
+      </div>
+      <div class="field">
+        <label for="fType">Lead type</label>
+        <select id="fType"><option value="">All types</option></select>
+      </div>
+      <div class="field">
+        <label for="fCity">City</label>
+        <select id="fCity"><option value="">All cities</option></select>
+      </div>
+      <div class="field">
+        <label for="fOcc">Owner lives there</label>
+        <select id="fOcc">
+          <option value="">Either way</option>
+          <option value="absentee">No &mdash; absentee</option>
+          <option value="owner">Yes &mdash; owner occupied</option>
+          <option value="unknown">Not known</option>
+        </select>
+      </div>
+      <div class="field">
+        <label for="fDate">Filed</label>
+        <select id="fDate">
+          <option value="">Any date</option>
+          <option value="7">Past 7 days</option>
+          <option value="14">Past 14 days</option>
+          <option value="30">Past 30 days</option>
+          <option value="90">Past 90 days</option>
+        </select>
+      </div>
+      <div class="spacer"></div>
+      <div class="actions">
+        <button class="btn" id="reset" type="button">Clear filters</button>
+        <a class="btn btn-go" id="csv" href="ghl_leads.csv" download
+           title="Owner names, mailing addresses, scores and flags">Full export</a>
+        <a class="btn btn-alt" id="skip" href="skiptrace_import.csv" download
+           title="Address, City, State, Zip and lead type -- ready for the skip tracer"
+           >Skip trace list</a>
+      </div>
+    </div>
+  </div>
+
+  <p class="count" id="count" hidden></p>
+
+  <table class="ledger" id="ledger" hidden>
+    <thead>
+      <tr>
+        <th role="button" tabindex="0" data-sort="score">Score<span class="arrow">&darr;</span></th>
+        <th>Owner</th>
+        <th>Property</th>
+        <th>Mailing address</th>
+        <th>Lead type</th>
+        <th>Signals</th>
+        <th role="button" tabindex="0" data-sort="amount">Amount<span class="arrow">&darr;</span></th>
+        <th role="button" tabindex="0" data-sort="filed">Filed<span class="arrow">&darr;</span></th>
+        <th>Record</th>
+      </tr>
+    </thead>
+    <tbody id="rows"></tbody>
+  </table>
+
+  <div class="cards" id="cards"></div>
+
+  <footer id="foot"></footer>
+</div>
+
+<script>
+"use strict";
+
+/* ---------- helpers --------------------------------------- */
+const $ = id => document.getElementById(id);
+const esc = s => String(s == null ? "" : s).replace(/[&<>"']/g,
+  c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+
+const TIERS = [
+  { min:80, cls:"--t1", label:"Very high" },
+  { min:60, cls:"--t2", label:"High" },
+  { min:40, cls:"--t3", label:"Moderate" },
+  { min:0,  cls:"--t4", label:"Lower" }
+];
+const tier = n => TIERS.find(t => (n || 0) >= t.min) || TIERS[3];
+const tierColor = n => getComputedStyle(document.documentElement)
+  .getPropertyValue(tier(n).cls).trim();
+
+const money = v => (typeof v === "number" && isFinite(v) && v > 0)
+  ? "$" + Math.round(v).toLocaleString("en-US") : "";
+
+function niceDate(s){
+  if(!s) return "";
+  const m = /^(\d{4})-(\d{2})-(\d{2})/.exec(s);
+  if(!m) return s;
+  const d = new Date(+m[1], +m[2]-1, +m[3]);
+  return d.toLocaleDateString("en-US",{ month:"short", day:"numeric", year:"numeric" });
+}
+/* Dates are counted in Eastern, not in whatever zone the laptop is set to.
+   "Today" has to mean today in Rockdale, or a lead pulled this morning
+   disappears from the Today chip the moment you open this on a trip. */
+const ET_TODAY = new Intl.DateTimeFormat("en-CA", {
+  timeZone:"America/New_York", year:"numeric", month:"2-digit", day:"2-digit"
+}).format(new Date());
+
+function dayNumber(s){
+  const m = /^(\d{4})-(\d{2})-(\d{2})/.exec(s || "");
+  return m ? Date.UTC(+m[1], +m[2]-1, +m[3]) / 86400000 : null;
+}
+function daysAgo(s){
+  const d = dayNumber(s);
+  return d === null ? Infinity : dayNumber(ET_TODAY) - d;
+}
+/* When the lead landed in the archive, falling back to the filing date for
+   rows written before the archive existed. */
+const pulledOn = r => r.first_seen || r.filed || "";
+const isEntity = n => /\b(LLC|INC|CORP|CORPORATION|LP|LLP|COMPANY|HOLDINGS|PROPERTIES|INVESTMENTS|TRUST|ESTATE)\b/i.test(n || "");
+
+const HOT = /pre-foreclosure|lis pendens|tax sale|tax delinquent|multiple distress/i;
+
+/* ---------- state ----------------------------------------- */
+let DATA = { records: [] };
+let VIEW = [];
+let sortKey = "score", sortDir = -1;
+let SINCE = "";        // "" = all time, otherwise days back from today (ET)
+let CATS = null;       // null = every lead type, otherwise a Set of cat codes
+let FLAG = null;       // an extra flag test from a clickable stat card
+
+/* Which cat codes sit behind each clickable stat card. */
+const CAT_GROUPS = {
+  FC:   ["FC"],
+  LIEN: ["LIEN","MECH","HOA","TAXLIEN","MED","JUD"],
+  PRO:  ["PRO"],
+  TAX:  ["TAX"],
+  LP:   ["LP","RELLP"]
+};
+
+/* ---------- benchmark disc (the signature) ---------------- */
+function disc(score, size){
+  const s = Math.max(0, Math.min(100, score || 0));
+  const r = size * 0.36, c = size / 2, circ = 2 * Math.PI * r;
+  const col = tierColor(s);
+  const ticks = Array.from({ length:24 }, (_, i) => {
+    const a = (i / 24) * Math.PI * 2 - Math.PI / 2;
+    const r1 = size * 0.455, r2 = size * (i % 6 === 0 ? 0.415 : 0.435);
+    return `<line x1="${c+Math.cos(a)*r1}" y1="${c+Math.sin(a)*r1}"
+                  x2="${c+Math.cos(a)*r2}" y2="${c+Math.sin(a)*r2}"
+                  stroke="var(--brass)" stroke-width="${size*0.011}" opacity=".55"/>`;
+  }).join("");
+  return `
+  <svg class="disc" width="${size}" height="${size}" viewBox="0 0 ${size} ${size}"
+       role="img" aria-label="Seller score ${s} out of 100, ${tier(s).label} motivation">
+    <circle cx="${c}" cy="${c}" r="${size*0.475}" fill="none"
+            stroke="var(--brass)" stroke-width="${size*0.012}" opacity=".5"/>
+    ${ticks}
+    <circle cx="${c}" cy="${c}" r="${r}" fill="none"
+            stroke="var(--rule-soft)" stroke-width="${size*0.055}"/>
+    <circle class="disc-ring" cx="${c}" cy="${c}" r="${r}" fill="none"
+            stroke="${col}" stroke-width="${size*0.055}" stroke-linecap="butt"
+            stroke-dasharray="${circ}" stroke-dashoffset="${circ*(1-s/100)}"
+            transform="rotate(-90 ${c} ${c})"/>
+    <text class="disc-num" x="${c}" y="${c + size*0.045}"
+          style="font-size:${size*0.26}px">${s}</text>
+    <text class="disc-cap" x="${c}" y="${c + size*0.235}"
+          style="font-size:${size*0.055}px">${tier(s).label.toUpperCase()}</text>
+  </svg>`;
+}
+
+/* ---------- load ------------------------------------------ */
+async function load(){
+  try{
+    const res = await fetch("records.json?t=" + Date.now(), { cache:"no-store" });
+    if(!res.ok) throw new Error("HTTP " + res.status);
+    DATA = await res.json();
+    if(!Array.isArray(DATA.records)) DATA.records = [];
+  }catch(err){
+    return offline(err);
+  }
+  build();
+}
+
+function offline(err){
+  const local = location.protocol === "file:";
+  $("notices").innerHTML = `
+    <div class="notice bad">
+      <strong>The lead file didn't load.</strong>
+      ${local
+        ? `Opening this page straight from a folder blocks it from reading
+           <code>records.json</code>. View it on your GitHub&nbsp;Pages address instead,
+           or run <code>python3 -m http.server</code> in this folder and open
+           <code>localhost:8000</code>.`
+        : `Check that <code>records.json</code> sits next to this page.
+           <span class="mono">(${esc(err.message)})</span>`}
+    </div>`;
+  $("hero").innerHTML = `
+    <div class="blank">
+      <h2>Nothing to show yet</h2>
+      <p>Once the scraper finishes a run it writes <code>records.json</code> here and
+         this page fills in on its own.</p>
+    </div>`;
+}
+
+/* ---------- build ----------------------------------------- */
+function build(){
+  const recs = DATA.records;
+  const rng = DATA.date_range || {};
+
+  $("plateMeta").innerHTML =
+    (rng.start ? `Recorded ${esc(niceDate(rng.start))} &ndash; ${esc(niceDate(rng.end))}<br>` : "") +
+    (DATA.fetched_at ? `Collected ${esc(niceDate(DATA.fetched_at.slice(0,10)))}` : "");
+
+  notices();
+
+  if(!recs.length){
+    $("hero").innerHTML = `
+      <div class="blank">
+        <h2>No leads yet</h2>
+        <p>The scraper hasn't published anything to this page. It runs each morning &mdash;
+           to collect a batch right now, open the Actions tab and run
+           <em>Daily Rockdale Lead Scrape</em>.</p>
+      </div>`;
+    return;
+  }
+
+  hero(recs);
+  dateChips();
+  strip();
+  fillFilters(recs);
+
+  ["q","minScore","fType","fCity","fOcc","fDate"].forEach(id =>
+    $(id).addEventListener("input", () => {
+      if(id === "fType" && $("fType").value){ CATS = null; }  // dropdown wins
+      apply();
+    }));
+  $("reset").addEventListener("click", () => {
+    $("q").value = ""; $("minScore").value = 0; $("minScoreVal").textContent = "0";
+    ["fType","fCity","fOcc","fDate"].forEach(id => $(id).value = "");
+    SINCE = ""; CATS = null; FLAG = null;
+    dateChips();
+    strip();
+    apply();
+  });
+  document.querySelectorAll("th[data-sort]").forEach(th => {
+    const go = () => {
+      const k = th.dataset.sort;
+      sortDir = (sortKey === k) ? -sortDir : -1;
+      sortKey = k;
+      apply();
+    };
+    th.addEventListener("click", go);
+    th.addEventListener("keydown", e => {
+      if(e.key === "Enter" || e.key === " "){ e.preventDefault(); go(); }
+    });
+  });
+
+  $("controls").hidden = false;
+  $("count").hidden = false;
+  $("ledger").hidden = false;
+  apply();
+
+  $("foot").innerHTML =
+    `<span>Sources: Clerk of Superior Court &middot; Georgia Public Notice &middot;
+     Rockdale County Tax Commissioner</span>
+     <span>Public record information. Verify before acting on any lead.</span>`;
+}
+
+function notices(){
+  const out = [];
+  if(DATA.last_attempt_status){
+    out.push(`<div class="notice"><strong>These leads are from an earlier run.</strong>
+      The most recent attempt didn't collect anything new, so nothing was overwritten.</div>`);
+  }
+  const rep = DATA.sources_report || {};
+  const down = Object.entries(rep).filter(([, v]) => v && v.ok === false && v.status !== "skipped")
+                     .map(([k]) => k.replace(/_/g," "));
+  if(down.length && down.length < Object.keys(rep).length){
+    out.push(`<div class="notice"><strong>Some sources were unavailable:</strong>
+      ${esc(down.join(", "))}. Everything else was collected as normal.</div>`);
+  }
+  $("notices").innerHTML = out.join("");
+}
+
+function hero(recs){
+  const top = recs.slice().sort((a,b) => (b.score||0)-(a.score||0))[0];
+  if(!top) return;
+  const flags = (top.flags || []).slice(0,6).map(f =>
+    `<span class="flag ${HOT.test(f)?"hot":""}">${esc(f)}</span>`).join("");
+  const facts = [
+    top.parcel_id ? `<b>Parcel</b> ${esc(top.parcel_id)}` : "",
+    money(top.amount) ? `<b>Owed</b> ${money(top.amount)}` : "",
+    top.filed ? `<b>Filed</b> ${esc(niceDate(top.filed))}` : "",
+    top.foreclosure_sale_date ? `<b>Sale</b> ${esc(niceDate(top.foreclosure_sale_date))}` : ""
+  ].filter(Boolean).join("");
+
+  $("hero").innerHTML = `
+    <section class="first">
+      ${disc(top.score, 132)}
+      <div>
+        <p class="first-label">Call first</p>
+        <h2 class="first-name">${esc(top.owner || "Owner not listed")}</h2>
+        <p class="first-addr">${esc(top.prop_address || "Property address not matched")}${
+          top.prop_city ? ", " + esc(top.prop_city) : ""}${
+          top.prop_zip ? " " + esc(top.prop_zip) : ""}</p>
+        <p class="first-mail">${top.mail_address
+          ? `<b>Mail to</b> ${esc(top.mail_address)}${top.mail_city ? ", " + esc(top.mail_city) : ""} ${esc(top.mail_zip||"")}`
+          : `<b>No mailing address matched</b>`}</p>
+        <div class="flags">${flags}</div>
+        <div class="first-facts">${facts}</div>
+      </div>
+    </section>`;
+}
+
+/* The strip doubles as the lead-type filter: the counts are scoped to whatever
+   date window is active, and clicking one narrows the table to that type. */
+function strip(){
+  const recs = inWindow();
+  const n = recs.length;
+  const avg = n ? Math.round(recs.reduce((s,r) => s + (r.score||0), 0) / n) : 0;
+  const inCats = g => recs.filter(r => CAT_GROUPS[g].includes(r.cat)).length;
+  const flagged = k => recs.filter(r => (r.flags||[]).some(f => k.test(f))).length;
+
+  const cells = [
+    { k:"Leads",           v:n,     role:"clear" },
+    { k:"With address",    v:recs.filter(r => r.prop_address).length, flag:"address" },
+    { k:"Average score",   v:avg,   role:"plain" },
+    { k:"New this week",   v:flagged(/new this week/i), flag:"newweek" },
+    { k:"Pre-foreclosure", v:inCats("FC"),   group:"FC" },
+    { k:"Lis pendens",     v:inCats("LP"),   group:"LP" },
+    { k:"Liens",           v:inCats("LIEN"), group:"LIEN" },
+    { k:"Probate",         v:inCats("PRO"),  group:"PRO" },
+    { k:"Tax distress",    v:inCats("TAX"),  group:"TAX" }
+  ];
+
+  $("strip").innerHTML = cells.map(c => {
+    const on = (c.group && CATS && CATS.has(c.group)) || (c.flag && FLAG === c.flag);
+    const role = c.role || (c.group ? "group" : "flag");
+    const attr = c.group ? ` data-group="${c.group}"` : c.flag ? ` data-flag="${c.flag}"` : "";
+    const press = role === "plain" ? "" : ` aria-pressed="${on ? "true" : "false"}"`;
+    const dis = role === "plain" ? " disabled" : "";
+    return `<button class="stat" type="button" data-role="${role}"${attr}${press}${dis}>
+      <div class="stat-n">${c.v}</div><div class="stat-k">${esc(c.k)}</div></button>`;
+  }).join("");
+  $("strip").hidden = false;
+
+  $("strip").querySelectorAll(".stat").forEach(btn => {
+    const role = btn.dataset.role;
+    if(role === "plain") return;
+    btn.addEventListener("click", () => {
+      if(role === "clear"){ CATS = null; FLAG = null; $("fType").value = ""; }
+      else if(role === "group"){
+        const g = btn.dataset.group;
+        CATS = (CATS && CATS.has(g)) ? null : new Set([g]);
+        $("fType").value = "";           // the dropdown would fight this filter
+      } else {
+        FLAG = FLAG === btn.dataset.flag ? null : btn.dataset.flag;
+      }
+      apply();
+    });
+  });
+}
+
+/* Everything inside the active date window, before any other filter. The stat
+   counts and the chips both read from this so the numbers agree. */
+function inWindow(){
+  return DATA.records.filter(r =>
+    SINCE === "" || daysAgo(pulledOn(r)) <= +SINCE);
+}
+
+function dateChips(){
+  const box = $("dateChips");
+  box.hidden = false;
+  box.querySelectorAll(".chip").forEach(chip => {
+    const val = chip.dataset.since;
+    chip.setAttribute("aria-pressed", val === SINCE ? "true" : "false");
+    chip.onclick = () => {
+      SINCE = val;
+      box.querySelectorAll(".chip").forEach(c =>
+        c.setAttribute("aria-pressed", c.dataset.since === SINCE ? "true" : "false"));
+      strip();
+      apply();
+    };
+  });
+
+  const stamps = DATA.records.map(pulledOn).filter(Boolean).sort();
+  $("chipNote").textContent = stamps.length
+    ? `archive runs ${niceDate(stamps[0])} to ${niceDate(stamps[stamps.length-1])}`
+    : "";
+}
+
+function fillFilters(recs){
+  const types = [...new Set(recs.map(r => r.cat_label).filter(Boolean))].sort();
+  const cities = [...new Set(recs.map(r => r.prop_city).filter(Boolean))].sort();
+  $("fType").insertAdjacentHTML("beforeend",
+    types.map(t => `<option value="${esc(t)}">${esc(t)}</option>`).join(""));
+  $("fCity").insertAdjacentHTML("beforeend",
+    cities.map(c => `<option value="${esc(c)}">${esc(c)}</option>`).join(""));
+}
+
+/* ---------- filter + sort + render ------------------------ */
+function apply(){
+  const q = $("q").value.trim().toLowerCase();
+  const min = +$("minScore").value;
+  const type = $("fType").value, city = $("fCity").value;
+  const occ = $("fOcc").value, within = $("fDate").value;
+  $("minScoreVal").textContent = min;
+
+  VIEW = DATA.records.filter(r => {
+    if(SINCE !== "" && daysAgo(pulledOn(r)) > +SINCE) return false;
+    if(CATS && !CAT_GROUPS[[...CATS][0]].includes(r.cat)) return false;
+    if(FLAG === "address" && !r.prop_address) return false;
+    if(FLAG === "newweek" && !(r.flags||[]).some(f => /new this week/i.test(f))) return false;
+    if((r.score||0) < min) return false;
+    if(type && r.cat_label !== type) return false;
+    if(city && r.prop_city !== city) return false;
+    if(occ === "absentee" && r.owner_occupied !== false) return false;
+    if(occ === "owner" && r.owner_occupied !== true) return false;
+    if(occ === "unknown" && r.owner_occupied !== null && r.owner_occupied !== undefined) return false;
+    if(within && daysAgo(r.filed) > +within) return false;
+    if(q){
+      const hay = [r.owner, r.prop_address, r.prop_city, r.mail_address,
+                   r.parcel_id, r.doc_num, r.doc_type, (r.flags||[]).join(" ")]
+                  .join(" ").toLowerCase();
+      if(!hay.includes(q)) return false;
+    }
+    return true;
+  });
+
+  VIEW.sort((a,b) => {
+    let x, y;
+    if(sortKey === "amount"){ x = a.amount||0; y = b.amount||0; }
+    else if(sortKey === "filed"){ x = a.filed||""; y = b.filed||""; return (x<y?-1:x>y?1:0) * sortDir; }
+    else { x = a.score||0; y = b.score||0; }
+    return (x - y) * sortDir;
+  });
+
+  document.querySelectorAll("th[data-sort]").forEach(th => {
+    if(th.dataset.sort === sortKey){
+      th.setAttribute("aria-sort", sortDir < 0 ? "descending" : "ascending");
+      th.querySelector(".arrow").innerHTML = sortDir < 0 ? "&darr;" : "&uarr;";
+    } else th.removeAttribute("aria-sort");
+  });
+
+  const total = DATA.records.length;
+  const label = { "0":"pulled today", "1":"pulled since yesterday", "7":"pulled in 7 days",
+                  "14":"pulled in 14 days", "30":"pulled in 30 days" }[SINCE] || "";
+  $("count").innerHTML = (VIEW.length === total
+    ? `<b>${total}</b> leads`
+    : `<b>${VIEW.length}</b> of ${total} leads`) + (label ? ` &middot; ${label}` : "");
+  $("strip").querySelectorAll(".stat[data-group], .stat[data-flag]").forEach(btn => {
+    const on = (btn.dataset.group && CATS && CATS.has(btn.dataset.group))
+            || (btn.dataset.flag && FLAG === btn.dataset.flag);
+    btn.setAttribute("aria-pressed", on ? "true" : "false");
+  });
+
+  render();
+}
+
+function flagHTML(r, limit){
+  const all = r.flags || [];
+  const shown = all.slice(0, limit).map(f =>
+    `<span class="flag ${HOT.test(f) ? "hot" : /absentee|owns \d/i.test(f) ? "abs" : ""}">${esc(f)}</span>`
+  ).join("");
+  const rest = all.length - limit;
+  return shown + (rest > 0 ? `<span class="flag" title="${esc(all.slice(limit).join(", "))}">+${rest}</span>` : "");
+}
+
+function render(){
+  if(!VIEW.length){
+    const blank = `<div class="blank"><h2>Nothing matches</h2>
+      <p>Widen the score or clear a filter to see more of the list.</p>
+      <button class="btn" type="button" onclick="document.getElementById('reset').click()">Clear filters</button></div>`;
+    $("rows").innerHTML = "";
+    $("cards").innerHTML = blank;
+    $("ledger").hidden = true;
+    return;
+  }
+  $("ledger").hidden = false;
+
+  $("rows").innerHTML = VIEW.map(r => {
+    const col = tierColor(r.score);
+    return `<tr class="${r.status==="released"?"is-released":""}">
+      <td><span class="pill" style="background:${col}">${r.score||0}</span></td>
+      <td class="owner">${esc(r.owner||"—")}${isEntity(r.owner)?'<span class="ent">Entity</span>':""}</td>
+      <td>${esc(r.prop_address||"—")}
+        ${r.prop_city?`<span class="addr-sub">${esc(r.prop_city)} ${esc(r.prop_zip||"")}</span>`:""}</td>
+      <td>${esc(r.mail_address||"—")}
+        ${r.mail_city?`<span class="addr-sub">${esc(r.mail_city)} ${esc(r.mail_state||"")} ${esc(r.mail_zip||"")}</span>`:""}</td>
+      <td class="type">${esc(r.cat_label||"")}<small>${esc((r.doc_type||"").slice(0,42))}</small></td>
+      <td><div class="flags">${flagHTML(r, 5)}</div></td>
+      <td class="mono">${money(r.amount)||"—"}</td>
+      <td class="mono">${esc(niceDate(r.filed))||"—"}</td>
+      <td>${r.clerk_url?`<a class="link" href="${esc(r.clerk_url)}" target="_blank" rel="noopener">Open</a>`:"—"}</td>
+    </tr>`;
+  }).join("");
+
+  $("cards").innerHTML = VIEW.map(r => {
+    const col = tierColor(r.score);
+    const meta = [
+      r.cat_label ? esc(r.cat_label) : "",
+      money(r.amount),
+      r.filed ? esc(niceDate(r.filed)) : ""
+    ].filter(Boolean).map(x => `<span>${x}</span>`).join("");
+    return `<article class="card ${r.status==="released"?"is-released":""}" style="border-left-color:${col}">
+      <div class="card-top">
+        <span class="pill" style="background:${col}">${r.score||0}</span>
+        <div>
+          <div class="card-who">${esc(r.owner||"Owner not listed")}</div>
+          <div class="card-addr">${esc(r.prop_address||"Address not matched")}${
+            r.prop_city?", "+esc(r.prop_city):""}</div>
+          ${r.mail_address?`<div class="card-mail">Mail to ${esc(r.mail_address)}${
+            r.mail_city?", "+esc(r.mail_city):""}</div>`:""}
+        </div>
+      </div>
+      <div class="flags">${flagHTML(r, 4)}</div>
+      <div class="card-meta">${meta}${
+        r.clerk_url?`<a class="link" href="${esc(r.clerk_url)}" target="_blank" rel="noopener">Record</a>`:""}</div>
+    </article>`;
+  }).join("");
+}
+
+load();
+</script>
+</body>
+</html>

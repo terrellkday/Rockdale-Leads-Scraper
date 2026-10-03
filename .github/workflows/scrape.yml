@@ -1,0 +1,409 @@
+---
+# =============================================================================
+# Rockdale County GA -- Motivated Seller Lead Scraper
+# =============================================================================
+# Runs every morning, collects public records, and publishes the results to
+# your GitHub Pages dashboard.
+#
+# ONE-TIME SETUP (two clicks, both in this repository's Settings tab):
+#
+#   1. Settings -> Actions -> General -> Workflow permissions
+#      Select "Read and write permissions", then Save.
+#      Without this the scraper cannot save its results back to the repo.
+#
+#   2. Settings -> Pages -> Build and deployment -> Source
+#      Select "GitHub Actions".
+#      Without this the dashboard will not publish (leads still collect fine).
+#
+# To run it right now instead of waiting for tomorrow:
+#   Actions tab -> "Daily Rockdale Lead Scrape" -> "Run workflow"
+# =============================================================================
+
+name: Daily Rockdale Lead Scrape
+
+on:
+  schedule:
+    # GitHub cron is ALWAYS in UTC. 13:17 UTC is 9:17am Eastern in summer
+    # (EDT) and 8:17am Eastern in winter (EST). GitHub does not adjust for
+    # daylight saving, so the local time shifts by an hour twice a year --
+    # harmless here, since the scraper looks back a full 7 days either way.
+    #
+    # The odd :17 is deliberate. Scheduled jobs queue heavily on the hour and
+    # GitHub may delay or drop them; an off-peak minute runs far more reliably.
+    # This slot is 60 minutes after the Coweta County scraper's 8:17am run
+    # (and 90 after Clayton's 7:47am) so the county repos never hammer
+    # georgiapublicnotice.com with parallel scrapes.
+    - cron: "17 13 * * *"
+
+  # Adds a "Run workflow" button on the Actions tab.
+  workflow_dispatch:
+    inputs:
+      lookback_days:
+        description: "How many days back to search (3 is the daily default)"
+        required: false
+        default: "3"
+        type: string
+      skip_sources:
+        description: "Sources to skip, comma separated: GSCCCA,NOTICES,TAX,PARCELS"
+        required: false
+        default: ""
+        type: string
+      everything:
+        description: "Include records already seen before (use for a one-time bulk export)"
+        required: false
+        default: false
+        type: boolean
+      gsccca_verify:
+        description: "Probe the GSCCCA premium search controls and exit (no scraping)"
+        required: false
+        default: false
+        type: boolean
+
+permissions:
+  # The scrape job only needs to write results back. Pages deployment gets
+  # its own narrower permissions on the publish job below.
+  contents: write      # save records.json and the CSV back to the repo
+
+# Never let two runs overlap. cancel-in-progress stays false so a long parcel
+# download is allowed to finish rather than being killed halfway.
+concurrency:
+  group: rockdale-leads
+  cancel-in-progress: false
+
+jobs:
+  # ===========================================================================
+  scrape:
+    name: Collect leads
+    # ubuntu-22.04 begins deprecation on 2026-09-17 and GitHub will fail jobs
+    # using it during brownout windows, so this is pinned to 24.04. Pinning a
+    # version rather than using ubuntu-latest means the OS cannot change under
+    # the scraper without warning.
+    runs-on: ubuntu-24.04
+    timeout-minutes: 60
+
+    steps:
+      - name: Check out the repository
+        uses: actions/checkout@v4
+        with:
+          # Full history so the results commit can rebase cleanly if you have
+          # pushed your own changes since the last run.
+          fetch-depth: 0
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+          cache: pip
+          cache-dependency-path: scraper/requirements.txt
+
+      - name: Restore cached browser
+        # Chromium is a ~150MB download. Caching it turns a 2-minute step into
+        # a 5-second one on every run after the first.
+        uses: actions/cache@v4
+        with:
+          path: ~/.cache/ms-playwright
+          key: playwright-${{ runner.os }}-${{ hashFiles('scraper/requirements.txt') }}
+          restore-keys: |
+            playwright-${{ runner.os }}-
+
+      - name: Install Python packages
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r scraper/requirements.txt
+
+      - name: Install Chromium
+        # Installing the playwright package does NOT install the browser it
+        # drives -- this is the separate step that does. It is a no-op when the
+        # cache above already provided it.
+        run: python -m playwright install --with-deps chromium
+
+      - name: Restore cached parcel data
+        # The parcel roll is a large download that changes slowly. The
+        # scraper keeps its own 72-hour freshness rule, so restoring an older
+        # copy is safe -- it re-downloads on its own when the copy goes stale.
+        uses: actions/cache@v4
+        with:
+          path: data/.cache
+          key: rockdale-parcels-${{ github.run_id }}
+          restore-keys: |
+            rockdale-parcels-
+
+      - name: Run the scraper
+        id: scrape
+        # Do not stop the job on a non-zero exit. A partial failure (one source
+        # down) still produces a usable lead file that should be saved and
+        # published; the job is marked failed at the very end instead.
+        continue-on-error: true
+        env:
+          LOOKBACK_DAYS: ${{ github.event.inputs.lookback_days || '3' }}
+          SKIP_SOURCES: ${{ github.event.inputs.skip_sources || '' }}
+          # Normally only new documents are exported, so each morning's file is
+          # genuinely fresh. Tick "everything" to include ones seen before.
+          NEW_ONLY: ${{ github.event.inputs.everything == 'true' && '0' || '1' }}
+          HEADLESS: "true"
+          LOG_LEVEL: INFO
+          # Optional. Leave these unset and the scraper simply writes the CSV.
+          # To enable direct CRM pushes add them under
+          # Settings -> Secrets and variables -> Actions.
+          GHL_API_KEY: ${{ secrets.GHL_API_KEY }}
+          GHL_LOCATION_ID: ${{ secrets.GHL_LOCATION_ID }}
+          # GSCCCA premium deed/lien search. Leave unset and the source is
+          # skipped; set GSCCCA_PREMIUM=1 plus the login to enable it.
+          GSCCCA_PREMIUM: ${{ secrets.GSCCCA_PREMIUM }}
+          GSCCCA_USER: ${{ secrets.GSCCCA_USER }}
+          GSCCCA_PASS: ${{ secrets.GSCCCA_PASS }}
+          GSCCCA_VERIFY: ${{ github.event.inputs.gsccca_verify == 'true' && '1' || '' }}
+        run: python scraper/fetch.py
+
+      - name: Run parser tests
+        # No network, a few seconds -- catches regressions before the scrape.
+        run: |
+          python scraper/test_qpublic_parser.py
+          python scraper/test_regression.py
+
+      - name: Write the run summary
+        # Produces a plain-English report on the Actions run page so you can see
+        # what happened without reading any logs.
+        if: always()
+        run: |
+          python - <<'PYTHON'
+          import json, os, pathlib
+
+          summary = pathlib.Path(os.environ["GITHUB_STEP_SUMMARY"])
+          lines = ["# Rockdale Lead Scrape", ""]
+
+          try:
+              data = json.loads(pathlib.Path("data/records.json").read_text())
+          except Exception as exc:
+              lines += [f"Could not read the results file: `{exc}`", ""]
+              summary.write_text("\n".join(lines))
+              raise SystemExit(0)
+
+          records = data.get("records", []) or []
+          hot = [r for r in records if (r.get("score") or 0) >= 80]
+          warm = [r for r in records if 60 <= (r.get("score") or 0) < 80]
+          rng = data.get("date_range", {}) or {}
+
+          lines += [
+              f"**{len(records)} leads** covering "
+              f"{rng.get('start', '?')} to {rng.get('end', '?')}",
+              "",
+              "| | Count |",
+              "|---|---|",
+              f"| Very high motivation (80-100) | {len(hot)} |",
+              f"| High motivation (60-79) | {len(warm)} |",
+              f"| With a property address | {data.get('with_address', 0)} |",
+              f"| Total | {len(records)} |",
+              "",
+          ]
+
+          if data.get("last_attempt_status"):
+              lines += [
+                  f"> Nothing new was collected this run, so the leads above are "
+                  f"from the previous successful run.",
+                  "",
+              ]
+
+          report = data.get("sources_report") or {}
+          if report:
+              lines += ["## Where the leads came from", "",
+                        "| Source | Status | Records |", "|---|---|---|"]
+              for name, info in report.items():
+                  mark = {"ok": "working", "skipped": "skipped"}.get(
+                      info.get("status"), "not available")
+                  note = info.get("error") or ""
+                  label = name.replace("_", " ").title()
+                  lines.append(f"| {label} | {mark} | {info.get('count', 0)} |")
+                  if note and not info.get("ok"):
+                      lines.append(f"| | _{note[:110]}_ | |")
+              lines.append("")
+
+          if hot:
+              # One row per property. The records list is document-level, so the
+              # same house can appear several times (co-owners, or one owner
+              # indexed two ways) and that reads like duplicates in a top-ten.
+              seen_props, top = set(), []
+              for r in hot:
+                  key = (r.get("parcel_id") or r.get("prop_address")
+                         or r.get("doc_num") or "").strip().upper()
+                  if key in seen_props:
+                      continue
+                  seen_props.add(key)
+                  top.append(r)
+                  if len(top) >= 10:
+                      break
+              lines += ["## Top leads today", "",
+                        "| Score | Owner | Property | Signals |", "|---|---|---|---|"]
+              for r in top:
+                  flags = ", ".join((r.get("flags") or [])[:4])
+                  lines.append(
+                      f"| {r.get('score')} | {r.get('owner', '')[:32]} | "
+                      f"{r.get('prop_address', '')[:32]} | {flags} |")
+              lines.append("")
+
+          if pathlib.Path("NEEDS_ATTENTION.md").exists():
+              lines += ["## Action needed", "",
+                        "The Clerk's website changed. Open `NEEDS_ATTENTION.md` "
+                        "in this repository -- it explains what to do in plain "
+                        "English. Everything else still ran.", ""]
+
+          summary.write_text("\n".join(lines))
+          print("\n".join(lines[:14]))
+          PYTHON
+
+      - name: Save diagnostics if something broke
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: diagnostics-${{ github.run_number }}
+          if-no-files-found: ignore
+          retention-days: 14
+          path: |
+            data/debug.log
+            data/notice_page_sample.json
+            data/unmapped_doc_types.json
+
+      - name: Save the results back to the repository
+        if: always()
+        run: |
+          set -euo pipefail
+          git config user.name  "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+
+          # Only the published outputs. data/.cache is excluded by .gitignore.
+          #
+          # These are two separate commands on purpose. git add treats a
+          # missing pathspec as fatal and stages NOTHING AT ALL -- so listing
+          # NEEDS_ATTENTION.md here, a file that only exists when a source
+          # breaks, silently staged nothing on every healthy run. The step then
+          # reported "No changes to save" and exited green while two weeks of
+          # leads were thrown away.
+          git add -A dashboard/ data/
+          if [ -f NEEDS_ATTENTION.md ]; then
+            git add NEEDS_ATTENTION.md
+          else
+            # It exists in the index only if a previous run was broken.
+            git rm --cached --ignore-unmatch -q NEEDS_ATTENTION.md || true
+          fi
+
+          echo "Staged for commit:"
+          git diff --cached --name-status | sed 's/^/  /' || true
+
+          if git diff --cached --quiet; then
+            echo "No changes to save - the lead list is identical to last run."
+            exit 0
+          fi
+
+          git commit -m "Auto-update Rockdale motivated seller leads ($(date -u '+%Y-%m-%d'))"
+
+          # Rebase onto anything pushed since checkout, then push. Retried
+          # because a push can lose a race with a concurrent change.
+          for attempt in 1 2 3; do
+            if git pull --rebase --autostash origin "${GITHUB_REF_NAME}" \
+               && git push origin "HEAD:${GITHUB_REF_NAME}" 2>push.log; then
+              echo "Results saved on attempt ${attempt}."
+              rm -f push.log
+              exit 0
+            fi
+            cat push.log 2>/dev/null || true
+            echo "Push attempt ${attempt} failed; retrying in 5s..."
+            sleep 5
+          done
+
+          # A permissions problem is not a transient one, and the raw git error
+          # ("403: Resource not accessible by integration") explains nothing to
+          # anyone who did not already know what it meant. Translate it.
+          if grep -qiE "403|permission to|denied|not accessible|protected branch" push.log 2>/dev/null; then
+            {
+              echo ""
+              echo "## The scraper could not save its results"
+              echo ""
+              echo "It collected the leads fine, but GitHub would not let it write"
+              echo "them back to this repository. This is a one-time settings change."
+              echo ""
+              echo "**Fix it here:**"
+              echo ""
+              echo "1. Go to <https://github.com/${GITHUB_REPOSITORY}/settings/actions>"
+              echo "2. Scroll to **Workflow permissions**"
+              echo "3. Select **Read and write permissions**"
+              echo "4. Click **Save**"
+              echo ""
+              echo "Then re-run this workflow from the Actions tab. Nothing was lost -"
+              echo "it will collect the same leads again."
+              echo ""
+              echo "If the setting is already correct, check whether this branch is"
+              echo "protected: <https://github.com/${GITHUB_REPOSITORY}/settings/branches>"
+            } >> "${GITHUB_STEP_SUMMARY}"
+
+            echo "::error title=Cannot save results::Turn on read and write permissions at https://github.com/${GITHUB_REPOSITORY}/settings/actions - see the run summary for steps"
+            exit 1
+          fi
+
+          echo "Could not save results after 3 attempts (network or conflict)."
+          exit 1
+
+      - name: Prepare the dashboard for publishing
+        if: always()
+        uses: actions/configure-pages@v5
+        continue-on-error: true
+
+      - name: Package the dashboard
+        if: always()
+        uses: actions/upload-pages-artifact@v3
+        continue-on-error: true
+        with:
+          path: dashboard
+
+      - name: Fail the run if every source was unavailable
+        # Runs last so the results are always saved and published first. This
+        # is what triggers GitHub's failure email.
+        if: steps.scrape.outcome == 'failure'
+        run: |
+          echo "The scraper exited with an error - see the summary above."
+          exit 1
+
+  # ===========================================================================
+  publish:
+    name: Publish dashboard
+    needs: scrape
+    if: always()
+    runs-on: ubuntu-24.04
+    permissions:
+      pages: write         # publish the dashboard
+      id-token: write      # required by the Pages deploy action
+    # Tolerated on purpose: until GitHub Pages is switched on in Settings this
+    # step cannot succeed, and a hard failure here would send a failure email
+    # every single morning while the lead collection itself is working fine.
+    continue-on-error: true
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4
+
+      - name: Explain how to turn Pages on
+        # Reached when Pages has not been switched to "GitHub Actions" yet. The
+        # lead collection is unaffected - only the published dashboard is.
+        if: failure()
+        run: |
+          {
+            echo ""
+            echo "## The dashboard did not publish"
+            echo ""
+            echo "Your leads were collected and saved normally - this only affects"
+            echo "the web dashboard. GitHub Pages needs to be switched on once."
+            echo ""
+            echo "**Fix it here:**"
+            echo ""
+            echo "1. Go to <https://github.com/${GITHUB_REPOSITORY}/settings/pages>"
+            echo "2. Under **Build and deployment**, set **Source** to **GitHub Actions**"
+            echo "3. That is the whole change - there is no Save button on this one"
+            echo ""
+            echo "Tomorrow's run will publish automatically. To see it sooner, re-run"
+            echo "this workflow from the Actions tab."
+            echo ""
+            echo "Until then you can still open \`dashboard/index.html\` from the"
+            echo "repository, and \`data/ghl_leads.csv\` imports into your CRM as normal."
+          } >> "${GITHUB_STEP_SUMMARY}"

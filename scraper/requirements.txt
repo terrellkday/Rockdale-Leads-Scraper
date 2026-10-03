@@ -1,0 +1,54 @@
+# =============================================================================
+# Coweta County GA motivated seller scraper -- Python dependencies
+# =============================================================================
+# Install with:   pip install -r scraper/requirements.txt
+# Then once:      python -m playwright install --with-deps chromium
+#
+# Playwright is pinned to an EXACT version on purpose: the GitHub Actions
+# workflow caches the downloaded Chromium keyed on a hash of this file, so a
+# floating playwright version would silently invalidate the cache every time
+# a new release shipped. The rest use major-version ranges -- patch and minor
+# updates flow through automatically (so security fixes land without any
+# action), but a breaking major release can never silently break the run.
+# Tested against Python 3.12 on ubuntu-24.04.
+# =============================================================================
+
+# --- HTTP -------------------------------------------------------------------
+# Used for the Coweta County tax-sale PDF directory and every static page.
+requests>=2.32,<3.0
+
+# --- HTML parsing -----------------------------------------------------------
+# BeautifulSoup reads the tax-sale directory listing and the legal-notice
+# result pages. lxml is its parser backend -- the code calls
+# BeautifulSoup(html, "lxml") explicitly, so lxml is required, not optional.
+beautifulsoup4>=4.12,<5.0
+lxml>=5.2,<7.0
+
+# --- Browser automation -----------------------------------------------------
+# The Georgia Public Notice site and the county's qPublic parcel pages need a
+# real Chromium (plain HTTP requests hit bot protection). Playwright drives it.
+#
+# IMPORTANT: installing this package does NOT install the browser itself.
+# The GitHub Actions workflow runs `python -m playwright install --with-deps
+# chromium` as a separate step. Skipping that step is the single most common
+# cause of "Executable doesn't exist" errors.
+playwright==1.63.0
+
+# --- Date handling ----------------------------------------------------------
+# Public records print dates every way imaginable: 06/02/2026, 10-APR-26,
+# "the first Tuesday in October 2026". dateutil is the fuzzy-parsing fallback
+# after the fixed formats are tried. tzdata keeps zoneinfo working on
+# platforms without a system tz database (e.g. Windows).
+python-dateutil>=2.9,<3.0
+tzdata>=2024.1
+
+# --- PDF text extraction ----------------------------------------------------
+# pymupdf reads the Coweta County Tax Commissioner's monthly tax-sale PDFs
+# positionally (they are columnar tables; plain text extraction reads down
+# each column, not across rows).
+pymupdf>=1.24,<2.0
+
+# --- Spreadsheet imports ----------------------------------------------------
+# SupplementalIndex reads .xlsx exports (e.g. from PropStream) and silently
+# skips them when this is missing -- so it is required, not optional.
+openpyxl>=3.1,<4.0

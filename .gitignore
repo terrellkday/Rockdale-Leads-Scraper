@@ -1,0 +1,113 @@
+# =============================================================================
+# Rockdale County Motivated Seller Scraper
+# =============================================================================
+# Two kinds of files live in data/: results you want kept forever, and working
+# files that would either bloat the repository or break the push outright.
+# The rules below separate them. See the note at the bottom for the files that
+# are deliberately NOT ignored -- ignoring those would quietly break features.
+# =============================================================================
+
+# --- The parcel cache. This one matters. ------------------------------------
+# The scraper can download a whole county parcel roll and
+# keeps it here so it does not have to re-download daily. That file is roughly
+# 140 MB. GitHub refuses any single file over 100 MB, so committing it would
+# not merely bloat the repo -- it would make every push fail with an error that
+# is very hard to undo once the file is in your history.
+# GitHub Actions caches this between runs instead, so nothing is lost.
+data/.cache/
+*.cache/
+
+# --- Half-written files -----------------------------------------------------
+# The scraper writes to a .tmp file first and renames it into place, so that a
+# crash mid-write cannot corrupt your lead list. If it is killed at exactly the
+# wrong moment a stray .tmp is left behind; it should never be committed.
+*.tmp
+*.bak
+
+# --- Python ------------------------------------------------------------------
+__pycache__/
+*.py[cod]
+*.egg-info/
+.venv/
+venv/
+env/
+.Python
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+
+# --- Playwright / browsers ---------------------------------------------------
+# The Chromium binary is ~150 MB and is installed fresh (or restored from the
+# Actions cache) on every run.
+ms-playwright/
+.playwright/
+playwright-report/
+test-results/
+node_modules/
+
+# --- Credentials -------------------------------------------------------------
+# Your GoHighLevel key belongs in GitHub Secrets, never in a file in the repo.
+# A public repository makes any key committed here visible to everyone, and
+# deleting it later does not remove it from the history.
+.env
+.env.*
+!.env.example
+*.pem
+*.key
+credentials.json
+secrets.json
+
+# --- Editors and operating systems -------------------------------------------
+.DS_Store
+._*
+.Spotlight-V100
+.Trashes
+Thumbs.db
+desktop.ini
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# --- Logs --------------------------------------------------------------------
+*.log
+logs/
+
+# =============================================================================
+# DELIBERATELY NOT IGNORED
+# =============================================================================
+# These sit in data/ and look like working files, but each one has to be
+# committed or a feature stops working. GitHub Actions runners are wiped after
+# every run, so anything not committed is gone by the next morning.
+#
+#   data/records.json                    your lead list
+#   dashboard/records.json               what the dashboard reads
+#   data/ghl_leads.csv                   your CRM import file
+#   dashboard/ghl_leads.csv              the copy the dashboard links to
+#
+#   data/seen_documents.json             remembers which documents have been
+#                                        seen before. Without it, every lead
+#                                        looks brand new every morning and the
+#                                        "New this week" flag becomes useless.
+#
+#   data/landmark_learned_selectors.json how the scraper taught itself to
+#                                        operate the Clerk's website. Without
+#                                        it, it relearns the site from scratch
+#                                        daily instead of going straight to
+#                                        what already worked.
+#
+#   data/unmapped_doc_types.json         document types the scraper did not
+#                                        recognize, so the list can be grown
+#                                        from real DeKalb data.
+#
+#   data/landmark_discovery.json         diagnostics written only when the
+#   data/landmark_failure.png            Clerk's site changes. Keeping them in
+#   data/landmark_page_dump.html         the repo means you can send them
+#                                        straight from GitHub instead of
+#                                        digging through workflow artifacts.
+#
+#   NEEDS_ATTENTION.md                   plain-English note that appears only
+#                                        when something needs a human. Deletes
+#                                        itself once the problem clears.
+# =============================================================================
