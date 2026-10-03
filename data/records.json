@@ -1,13 +1,13 @@
 {
-  "fetched_at": "2026-10-02T22:56:27.606491-04:00",
+  "fetched_at": "2026-10-03T08:32:51.502247-04:00",
   "source": "Rockdale County GA Public Records",
   "date_range": {
-    "start": "2026-09-02",
-    "end": "2026-10-02"
+    "start": "2026-09-30",
+    "end": "2026-10-03"
   },
   "run_window": {
-    "start": "2026-09-02",
-    "end": "2026-10-02"
+    "start": "2026-09-30",
+    "end": "2026-10-03"
   },
   "archive_range": {
     "start": "2026-10-02",
@@ -17,7 +17,7 @@
     "start": "2026-09-02",
     "end": "2026-09-30"
   },
-  "new_this_run": 7,
+  "new_this_run": 0,
   "archive_total": 7,
   "dashboard_days": 120,
   "total": 7,
@@ -44,7 +44,7 @@
     "legal_notices": {
       "ok": true,
       "status": "ok",
-      "count": 7,
+      "count": 6,
       "error": ""
     },
     "tax_sales": {
