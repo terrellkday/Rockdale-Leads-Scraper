@@ -4834,7 +4834,7 @@ async def run_all() -> int:
         log.info("New since the last run: %d of %d documents",
                  len(fresh), len(all_records))
         if not fresh:
-            log.info("Nothing new today -- the CSVs will carry headers only")
+            log.info("Nothing new today -- CSVs carry the full archived list")
 
     # qPublic parcel reports: owner of record + mailing address, looked up by
     # parcel number. New records get live lookups; previously exported records
@@ -4879,12 +4879,15 @@ async def run_all() -> int:
             rec.setdefault("score", 30)
 
     # --- 6. Output ----------------------------------------------------------
-    # `fresh` is what the CSV exports carry. The archive still gets everything
-    # this run saw, or history develops holes on any day a document is re-seen
-    # rather than newly found.
+    # CSV exports carry the FULL rolling lead list (Rell, 2026-10-05):
+    # new-only exports left him with blank attachments most days. new_this_run
+    # is still tracked in the payload for the email body. The archive still
+    # gets everything this run saw, or history develops holes on any day a
+    # document is re-seen rather than newly found.
     payload = write_outputs(fresh, start, end, archive_input=everything_seen)
-    export_ghl_csv([shape_record(r) for r in fresh])
-    write_skiptrace_import([shape_record(r) for r in fresh])
+    full_records = payload.get("records", [])
+    export_ghl_csv(full_records)
+    write_skiptrace_import(full_records)
     push_to_gohighlevel([shape_record(r) for r in fresh])
     if updated:
         export_ghl_csv([shape_record(r) for r in updated],
