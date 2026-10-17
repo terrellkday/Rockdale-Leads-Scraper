@@ -1,13 +1,13 @@
 {
-  "fetched_at": "2026-10-16T07:14:01.803408-04:00",
+  "fetched_at": "2026-10-17T07:11:41.214097-04:00",
   "source": "Rockdale County GA Public Records",
   "date_range": {
-    "start": "2026-10-13",
-    "end": "2026-10-16"
+    "start": "2026-10-14",
+    "end": "2026-10-17"
   },
   "run_window": {
-    "start": "2026-10-13",
-    "end": "2026-10-16"
+    "start": "2026-10-14",
+    "end": "2026-10-17"
   },
   "archive_range": {
     "start": "2026-10-02",
@@ -514,7 +514,7 @@
       "status": "active",
       "match_confidence": 0.0,
       "match_method": "none",
-      "last_verified": "2026-10-16",
+      "last_verified": "2026-10-17",
       "flags": [
         "Pre-foreclosure",
         "New this week"
@@ -556,7 +556,7 @@
       "status": "active",
       "match_confidence": 0.0,
       "match_method": "none",
-      "last_verified": "2026-10-16",
+      "last_verified": "2026-10-17",
       "flags": [
         "Pre-foreclosure",
         "New this week"
@@ -598,7 +598,7 @@
       "status": "active",
       "match_confidence": 0.0,
       "match_method": "none",
-      "last_verified": "2026-10-16",
+      "last_verified": "2026-10-17",
       "flags": [
         "Pre-foreclosure",
         "New this week"
@@ -640,7 +640,7 @@
       "status": "active",
       "match_confidence": 0.0,
       "match_method": "none",
-      "last_verified": "2026-10-16",
+      "last_verified": "2026-10-17",
       "flags": [
         "Pre-foreclosure",
         "New this week"
@@ -682,7 +682,7 @@
       "status": "active",
       "match_confidence": 0.0,
       "match_method": "none",
-      "last_verified": "2026-10-16",
+      "last_verified": "2026-10-17",
       "flags": [
         "Pre-foreclosure",
         "New this week"
@@ -724,7 +724,7 @@
       "status": "active",
       "match_confidence": 0.0,
       "match_method": "none",
-      "last_verified": "2026-10-16",
+      "last_verified": "2026-10-17",
       "flags": [
         "Pre-foreclosure",
         "New this week"
