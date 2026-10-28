@@ -1,13 +1,13 @@
 {
-  "fetched_at": "2026-10-27T07:24:01.651924-04:00",
+  "fetched_at": "2026-10-28T07:13:48.656414-04:00",
   "source": "Rockdale County GA Public Records",
   "date_range": {
-    "start": "2026-10-24",
-    "end": "2026-10-27"
+    "start": "2026-10-25",
+    "end": "2026-10-28"
   },
   "run_window": {
-    "start": "2026-10-24",
-    "end": "2026-10-27"
+    "start": "2026-10-25",
+    "end": "2026-10-28"
   },
   "archive_range": {
     "start": "2026-10-02",
@@ -15,7 +15,7 @@
   },
   "filed_range": {
     "start": "2026-09-02",
-    "end": "2026-10-21"
+    "end": "2026-10-28"
   },
   "new_this_run": 0,
   "archive_total": 24,
@@ -64,7 +64,7 @@
     {
       "doc_num": "GPN-RNC1233",
       "doc_type": "Notice of Sale Under Power",
-      "filed": "2026-10-21",
+      "filed": "2026-10-28",
       "cat": "FC",
       "cat_label": "Pre-Foreclosure",
       "owner": "Theresa D. Henson",
@@ -72,7 +72,7 @@
       "name_order": "natural",
       "grantee": "",
       "amount": null,
-      "legal": "Rockdale Citizen Wednesday, October 21, 2026 City: Conyers County: Rockdale gpn11 RNC1233 RNC1233 gpn11 NOTICE OF SALE UNDER POWER, ROCKDALE COUNTY Pursuant to the Power of Sale contained in a Security Deed given by Theresa D. Henson to Chase Manhattan Mortgage Corporation dated 12/10/2001 and recorded in Deed Book 2189 Page 274 and modified at Deed Book 7581Page 193Ro ... click 'view' to open the full text.",
+      "legal": "Rockdale Citizen Wednesday, October 28, 2026 City: Conyers County: Rockdale gpn11 RNC1233 RNC1233 gpn11 NOTICE OF SALE UNDER POWER, ROCKDALE COUNTY Pursuant to the Power of Sale contained in a Security Deed given by Theresa D. Henson to Chase Manhattan Mortgage Corporation dated 12/10/2001 and recorded in Deed Book 2189 Page 274 and modified at Deed Book 7581Page 193Ro ... click 'view' to open the full text.",
       "parcel_id": "",
       "prop_address": "",
       "prop_city": "",
@@ -94,7 +94,7 @@
       "status": "active",
       "match_confidence": 0.0,
       "match_method": "none",
-      "last_verified": "2026-10-27",
+      "last_verified": "2026-10-28",
       "flags": [
         "Pre-foreclosure",
         "New this week"
@@ -106,7 +106,7 @@
     {
       "doc_num": "GPN-RNC1226",
       "doc_type": "Notice of Sale Under Power",
-      "filed": "2026-10-21",
+      "filed": "2026-10-28",
       "cat": "FC",
       "cat_label": "Pre-Foreclosure",
       "owner": "Vincent McWhinney",
@@ -114,7 +114,7 @@
       "name_order": "natural",
       "grantee": "",
       "amount": null,
-      "legal": "Rockdale Citizen Wednesday, October 21, 2026 City: Conyers County: Rockdale gpn11 RNC1226 RNC1226 gpn11 NOTICE OF SALE UNDER POWER, ROCKDALE COUNTY Pursuant to the Power of Sale contained in a Security Deed given by Vincent McWhinney to Mortgage Electronic Registration Systems, Inc., as grantee, as nominee for Pine State Mortgage Corporation, its successors and assigns ... click 'view' to open the full text.",
+      "legal": "Rockdale Citizen Wednesday, October 28, 2026 City: Conyers County: Rockdale gpn11 RNC1226 RNC1226 gpn11 NOTICE OF SALE UNDER POWER, ROCKDALE COUNTY Pursuant to the Power of Sale contained in a Security Deed given by Vincent McWhinney to Mortgage Electronic Registration Systems, Inc., as grantee, as nominee for Pine State Mortgage Corporation, its successors and assigns ... click 'view' to open the full text.",
       "parcel_id": "",
       "prop_address": "",
       "prop_city": "",
@@ -136,7 +136,7 @@
       "status": "active",
       "match_confidence": 0.0,
       "match_method": "none",
-      "last_verified": "2026-10-27",
+      "last_verified": "2026-10-28",
       "flags": [
         "Pre-foreclosure",
         "New this week"
@@ -148,7 +148,7 @@
     {
       "doc_num": "GPN-RNC1222",
       "doc_type": "Notice of Sale Under Power",
-      "filed": "2026-10-21",
+      "filed": "2026-10-28",
       "cat": "FC",
       "cat_label": "Pre-Foreclosure",
       "owner": "Alfretta Lynch",
@@ -156,7 +156,7 @@
       "name_order": "natural",
       "grantee": "",
       "amount": null,
-      "legal": "Rockdale Citizen Wednesday, October 21, 2026 City: Conyers County: Rockdale gpn11 RNC1222 RNC1222 gpn11 NOTICE OF SALE UNDER POWER, ROCKDALE COUNTY Pursuant to the Power of Sale contained in a Security Deed given by Alfretta Lynch to Mortgage Electronic Registration Systems, Inc., as grantee, as nominee for Fremont Investment & Loan, its successors and assigns dated 12 ... click 'view' to open the full text.",
+      "legal": "Rockdale Citizen Wednesday, October 28, 2026 City: Conyers County: Rockdale gpn11 RNC1222 RNC1222 gpn11 NOTICE OF SALE UNDER POWER, ROCKDALE COUNTY Pursuant to the Power of Sale contained in a Security Deed given by Alfretta Lynch to Mortgage Electronic Registration Systems, Inc., as grantee, as nominee for Fremont Investment & Loan, its successors and assigns dated 12 ... click 'view' to open the full text.",
       "parcel_id": "",
       "prop_address": "",
       "prop_city": "",
@@ -178,7 +178,7 @@
       "status": "active",
       "match_confidence": 0.0,
       "match_method": "none",
-      "last_verified": "2026-10-27",
+      "last_verified": "2026-10-28",
       "flags": [
         "Pre-foreclosure",
         "New this week"
@@ -190,7 +190,7 @@
     {
       "doc_num": "GPN-RNC1203",
       "doc_type": "Notice of Sale Under Power",
-      "filed": "2026-10-21",
+      "filed": "2026-10-28",
       "cat": "FC",
       "cat_label": "Pre-Foreclosure",
       "owner": "Lyndon Green",
@@ -198,7 +198,7 @@
       "name_order": "natural",
       "grantee": "",
       "amount": null,
-      "legal": "Rockdale Citizen Wednesday, October 21, 2026 City: Conyers County: Rockdale gpn11 rnc1203 Rnc1203 gpn11 NOTICE OF FORECLOSURE SALE UNDER POWER ROCKDALE COUNTY, GEORGIA THIS IS AN ATTEMPT TO COLLECT A DEBT. ANY INFORMATION OBTAINED WILL BE USED FOR THAT PURPOSE. Under and by virtue of the Power of Sale contained in a Security Deed given by Lyndon Green to Mortgage Ele ... click 'view' to open the full text.",
+      "legal": "Rockdale Citizen Wednesday, October 28, 2026 City: Conyers County: Rockdale gpn11 rnc1203 Rnc1203 gpn11 NOTICE OF FORECLOSURE SALE UNDER POWER ROCKDALE COUNTY, GEORGIA THIS IS AN ATTEMPT TO COLLECT A DEBT. ANY INFORMATION OBTAINED WILL BE USED FOR THAT PURPOSE. Under and by virtue of the Power of Sale contained in a Security Deed given by Lyndon Green to Mortgage Ele ... click 'view' to open the full text.",
       "parcel_id": "",
       "prop_address": "",
       "prop_city": "",
@@ -220,7 +220,7 @@
       "status": "active",
       "match_confidence": 0.0,
       "match_method": "none",
-      "last_verified": "2026-10-27",
+      "last_verified": "2026-10-28",
       "flags": [
         "Pre-foreclosure",
         "New this week"
@@ -232,7 +232,7 @@
     {
       "doc_num": "GPN-RNC1242",
       "doc_type": "Notice of Sale Under Power",
-      "filed": "2026-10-21",
+      "filed": "2026-10-28",
       "cat": "FC",
       "cat_label": "Pre-Foreclosure",
       "owner": "Theresa D. Henson",
@@ -240,7 +240,7 @@
       "name_order": "natural",
       "grantee": "",
       "amount": null,
-      "legal": "Rockdale Citizen Wednesday, October 21, 2026 City: Conyers County: Rockdale gpn11 Gpn11 rnc1242 NOTICE OF SALE UNDER POWER, ROCKDALE COUNTY Pursuant to the Power of Sale contained in a Security Deed given by Theresa D. Henson to Chase Manhattan Mortgage Corporation dated 12/10/2001 and recorded in Deed Book 2189 Page 274 and modified at Deed Book 7581Page 193Rockdale C ... click 'view' to open the full text.",
+      "legal": "Rockdale Citizen Wednesday, October 28, 2026 City: Conyers County: Rockdale gpn11 Gpn11 rnc1242 NOTICE OF SALE UNDER POWER, ROCKDALE COUNTY Pursuant to the Power of Sale contained in a Security Deed given by Theresa D. Henson to Chase Manhattan Mortgage Corporation dated 12/10/2001 and recorded in Deed Book 2189 Page 274 and modified at Deed Book 7581Page 193Rockdale C ... click 'view' to open the full text.",
       "parcel_id": "",
       "prop_address": "",
       "prop_city": "",
@@ -262,7 +262,7 @@
       "status": "active",
       "match_confidence": 0.0,
       "match_method": "none",
-      "last_verified": "2026-10-27",
+      "last_verified": "2026-10-28",
       "flags": [
         "Pre-foreclosure",
         "New this week"
@@ -274,7 +274,7 @@
     {
       "doc_num": "GPN-RNC1192",
       "doc_type": "Notice of Sale Under Power",
-      "filed": "2026-10-21",
+      "filed": "2026-10-28",
       "cat": "FC",
       "cat_label": "Pre-Foreclosure",
       "owner": "Jamila Higgins",
@@ -282,7 +282,7 @@
       "name_order": "natural",
       "grantee": "",
       "amount": null,
-      "legal": "Rockdale Citizen Wednesday, October 21, 2026 City: Conyers County: Rockdale gpn11 Gpn11 rnc1192 Notice of Sale Under Power State of Georgia, County of Rockdale Under and by virtue of the Power of Sale contained in a Security Deed given by Jamila Higgins to Mortgage Electronic Registration Systems, Inc., as nominee for Everett Financial, Inc. dba Supreme Lending (the Se ... click 'view' to open the full text.",
+      "legal": "Rockdale Citizen Wednesday, October 28, 2026 City: Conyers County: Rockdale gpn11 Gpn11 rnc1192 Notice of Sale Under Power State of Georgia, County of Rockdale Under and by virtue of the Power of Sale contained in a Security Deed given by Jamila Higgins to Mortgage Electronic Registration Systems, Inc., as nominee for Everett Financial, Inc. dba Supreme Lending (the Se ... click 'view' to open the full text.",
       "parcel_id": "",
       "prop_address": "",
       "prop_city": "",
@@ -304,7 +304,7 @@
       "status": "active",
       "match_confidence": 0.0,
       "match_method": "none",
-      "last_verified": "2026-10-27",
+      "last_verified": "2026-10-28",
       "flags": [
         "Pre-foreclosure",
         "New this week"
