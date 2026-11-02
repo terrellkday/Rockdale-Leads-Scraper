@@ -1,13 +1,13 @@
 {
-  "fetched_at": "2026-11-01T07:13:44.590201-05:00",
+  "fetched_at": "2026-11-02T07:14:20.043955-05:00",
   "source": "Rockdale County GA Public Records",
   "date_range": {
-    "start": "2026-10-29",
-    "end": "2026-11-01"
+    "start": "2026-10-30",
+    "end": "2026-11-02"
   },
   "run_window": {
-    "start": "2026-10-29",
-    "end": "2026-11-01"
+    "start": "2026-10-30",
+    "end": "2026-11-02"
   },
   "archive_range": {
     "start": "2026-10-02",
@@ -17,7 +17,7 @@
     "start": "2026-09-02",
     "end": "2026-11-01"
   },
-  "new_this_run": 1,
+  "new_this_run": 0,
   "archive_total": 25,
   "dashboard_days": 120,
   "total": 25,
@@ -94,7 +94,7 @@
       "status": "active",
       "match_confidence": 0.0,
       "match_method": "none",
-      "last_verified": "2026-11-01",
+      "last_verified": "2026-11-02",
       "flags": [
         "Pre-foreclosure",
         "LLC / corp owner",
@@ -137,7 +137,7 @@
       "status": "active",
       "match_confidence": 0.0,
       "match_method": "none",
-      "last_verified": "2026-11-01",
+      "last_verified": "2026-11-02",
       "flags": [
         "Pre-foreclosure",
         "New this week"
@@ -179,7 +179,7 @@
       "status": "active",
       "match_confidence": 0.0,
       "match_method": "none",
-      "last_verified": "2026-11-01",
+      "last_verified": "2026-11-02",
       "flags": [
         "Pre-foreclosure",
         "New this week"
@@ -221,7 +221,7 @@
       "status": "active",
       "match_confidence": 0.0,
       "match_method": "none",
-      "last_verified": "2026-11-01",
+      "last_verified": "2026-11-02",
       "flags": [
         "Pre-foreclosure",
         "New this week"
@@ -263,7 +263,7 @@
       "status": "active",
       "match_confidence": 0.0,
       "match_method": "none",
-      "last_verified": "2026-11-01",
+      "last_verified": "2026-11-02",
       "flags": [
         "Pre-foreclosure",
         "New this week"
@@ -305,7 +305,7 @@
       "status": "active",
       "match_confidence": 0.0,
       "match_method": "none",
-      "last_verified": "2026-11-01",
+      "last_verified": "2026-11-02",
       "flags": [
         "Pre-foreclosure",
         "New this week"
