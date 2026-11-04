@@ -121,7 +121,11 @@ def test_past_tax_sale_flag():
     flags = build_flags(past, {"categories": set()}, start, end)
     assert "Past tax sale / redemption period" in flags, flags
     assert "Tax sale" not in flags, flags
-    future = {"cat": "TAX", "tax_sale_date": "2026-11-03", "owner": "X"}
+    # Relative to today so this test cannot go stale: any date in the
+    # future must flag "Tax sale" (build_flags treats a sale date
+    # before today as past / redemption period).
+    future_date = (datetime.now() + timedelta(days=2)).strftime("%Y-%m-%d")
+    future = {"cat": "TAX", "tax_sale_date": future_date, "owner": "X"}
     flags2 = build_flags(future, {"categories": set()}, start, end)
     assert "Tax sale" in flags2, flags2
     assert "Past tax sale / redemption period" not in flags2, flags2
