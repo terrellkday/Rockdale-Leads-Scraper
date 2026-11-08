@@ -32,7 +32,7 @@
     "status": "active",
     "match_confidence": 0.0,
     "match_method": "none",
-    "last_verified": "2026-11-07",
+    "last_verified": "2026-11-08",
     "flags": [
       "Pre-foreclosure",
       "LLC / corp owner",
@@ -75,7 +75,7 @@
     "status": "active",
     "match_confidence": 0.0,
     "match_method": "none",
-    "last_verified": "2026-11-07",
+    "last_verified": "2026-11-08",
     "flags": [
       "Pre-foreclosure",
       "New this week"
@@ -117,7 +117,7 @@
     "status": "active",
     "match_confidence": 0.0,
     "match_method": "none",
-    "last_verified": "2026-11-07",
+    "last_verified": "2026-11-08",
     "flags": [
       "Pre-foreclosure",
       "New this week"
@@ -159,7 +159,7 @@
     "status": "active",
     "match_confidence": 0.0,
     "match_method": "none",
-    "last_verified": "2026-11-07",
+    "last_verified": "2026-11-08",
     "flags": [
       "Pre-foreclosure",
       "New this week"
@@ -201,7 +201,7 @@
     "status": "active",
     "match_confidence": 0.0,
     "match_method": "none",
-    "last_verified": "2026-11-07",
+    "last_verified": "2026-11-08",
     "flags": [
       "Pre-foreclosure",
       "New this week"
@@ -243,7 +243,7 @@
     "status": "active",
     "match_confidence": 0.0,
     "match_method": "none",
-    "last_verified": "2026-11-07",
+    "last_verified": "2026-11-08",
     "flags": [
       "Pre-foreclosure",
       "New this week"
@@ -285,7 +285,7 @@
     "status": "active",
     "match_confidence": 0.0,
     "match_method": "none",
-    "last_verified": "2026-11-07",
+    "last_verified": "2026-11-08",
     "flags": [
       "Pre-foreclosure",
       "New this week"
@@ -327,7 +327,7 @@
     "status": "active",
     "match_confidence": 0.0,
     "match_method": "none",
-    "last_verified": "2026-11-07",
+    "last_verified": "2026-11-08",
     "flags": [
       "Pre-foreclosure",
       "New this week"
@@ -380,16 +380,16 @@
   },
   {
     "doc_num": "GPN-RNC1307",
-    "doc_type": "Legal Notice (TAX)",
+    "doc_type": "Notice of Sale Under Power",
     "filed": "2026-11-01",
-    "cat": "TAX",
-    "cat_label": "Tax Delinquent / Tax Sale",
+    "cat": "FC",
+    "cat_label": "Pre-Foreclosure",
     "owner": "AIRLINE ROAD PROPERTY HOLDINGS LLC",
     "parcel_owner": "",
     "name_order": "natural",
     "grantee": "",
     "amount": null,
-    "legal": "Rockdale Citizen Sunday, November 01, 2026 City: Conyers County: Rockdale gpn11 Gpn11 rnc1307 NOTICE OF FORECLOSURE OF RIGHT TO REDEEM REAL PROPERTY FROM TAX SALE TO: AIRLINE ROAD PROPERTY HOLDINGS LLC, Southern Conservation Trust, Inc. and successors, any occupants, and any and all persons and entities who may claim any interest in the real property described below. ... click 'view' to open the full text.",
+    "legal": "Rockdale Citizen Sunday, November 08, 2026 City: Conyers County: Rockdale gpn11 Gpn11 rnc1307 NOTICE OF FORECLOSURE OF RIGHT TO REDEEM REAL PROPERTY FROM TAX SALE TO: AIRLINE ROAD PROPERTY HOLDINGS LLC, Southern Conservation Trust, Inc. and successors, any occupants, and any and all persons and entities who may claim any interest in the real property described below. ... click 'view' to open the full text.",
     "parcel_id": "",
     "prop_address": "",
     "prop_city": "",
@@ -411,7 +411,7 @@
     "status": "active",
     "match_confidence": 0.0,
     "match_method": "none",
-    "last_verified": "2026-11-07",
+    "last_verified": "2026-11-08",
     "flags": [
       "Pre-foreclosure",
       "LLC / corp owner",
